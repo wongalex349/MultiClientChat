@@ -14,6 +14,15 @@ class Server
 		return ch;
 	}
 
+	public static void printCurrentUsernames()
+	{
+		System.out.print("Current Users: ");
+		Set<String> usernames = users.keySet();
+		for(String s:usernames)
+			System.out.print(s+"\t");
+		System.out.println();
+	}
+
 	public static void main(String argv[])
 	{ 
 		ServerSocket welcomeSocket; 
@@ -29,6 +38,7 @@ class Server
 				ChatHandler ch = addUser(connect);
 				Thread thr = new Thread(ch);
 				thr.start();
+				printCurrentUsernames();
 			} 
 		} catch(IOException e) {System.out.println("Server socket creation error");}
 	} 	

@@ -47,7 +47,6 @@ class ChatHandler implements Runnable
 		{	
 			while(true)
 			{
-				System.out.println("the fridge is running");
 				break;
 			}
 		} 	catch(Exception e) {}

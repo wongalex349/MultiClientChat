@@ -32,7 +32,8 @@ class Client
 		{
 			try
 			{
-				break;
+				if(rcvFlag(_EXIT))
+					break;
 			} catch(Exception e)	{	System.out.println("Client I/O error");	}
 		}
 		clientSocket.close();
