@@ -55,7 +55,7 @@ class ChatHandler implements Runnable
 
 	public boolean sendRcvFlag(int sendFlag, int rcvFlag) throws IOException
 	{
-		System.out.println("sending:"+sendFlag+"expecting:"+rcvFlag);
+		System.out.println("sending:"+sendFlag+" expecting:"+rcvFlag);
 		outUser.writeByte(sendFlag);
 		return (inUser.read() == rcvFlag);
 	} 
