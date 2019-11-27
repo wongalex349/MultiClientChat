@@ -11,7 +11,7 @@ class Server
 	{
 		ChatHandler ch = new ChatHandler(user);
 		users.put(ch.getName(), ch);
-		System.out.println(ch.getName());
+		//System.out.println(ch.getName());
 		return ch;
 	}
 
@@ -152,7 +152,7 @@ class Server
 
 		public boolean sendRcvFlag(int sendFlag, int rcvFlag) throws IOException
 		{
-			System.out.println("sending:"+sendFlag+" expecting:"+rcvFlag);
+			//System.out.println("sending:"+sendFlag+" expecting:"+rcvFlag);
 			outUser.writeByte(sendFlag);
 			int temp = inUser.read();
 			//System.out.println("flag: " + temp);
@@ -160,7 +160,7 @@ class Server
 		} 
 		public boolean rcvFlag(int rcvFlag) throws IOException
 		{
-			System.out.println("expecting:"+rcvFlag);
+			//System.out.println("expecting:"+rcvFlag);
 			if(inUser.ready())
 				return (inUser.read() == rcvFlag);
 			else
@@ -168,7 +168,7 @@ class Server
 		}
 		public boolean sendFlag(int sendFlag) throws IOException
 		{
-			System.out.println("sending:"+sendFlag);
+			//System.out.println("sending:"+sendFlag);
 			outUser.writeByte(sendFlag);
 			return true;
 		}
