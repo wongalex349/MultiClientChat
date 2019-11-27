@@ -35,7 +35,8 @@ class Client
 		{
 			try
 			{
-				getMessages();		
+				getMessages();
+				textBoxControls();
 				if(closeSocket)
 					break;
 			} catch(Exception e)	{	System.out.println("Client I/O error");	}
@@ -72,26 +73,23 @@ class Client
 
 	public static String getUserInput() throws IOException
 	{
-		System.out.print("> ");
+		System.out.print("\n> ");
 		return inUser.readLine();
 	}
 
 	public static void sendMsgToServer(String msg) throws IOException
 	{
 		String timestamp = LocalTime.now().toString();
-		String fullmessage = timestamp + "@@parser@@" + msg;
-		sendFlag(_SEND);
+		String fullmessage = timestamp + "@@parser@@" + msg + "\n";
+		//sendFlag(_SEND);
 		outServer.writeBytes(fullmessage);
 		//System.out.println(timestamp);
 	}
 
 	public static void getMessages() throws IOException
 	{
-		//if(rcvFlag(_SEND))
-		//{
+		while(inServer.ready())
 			System.out.println(inServer.readLine());
-		//	sendFlag(_RECV);
-		//}
 	}
 
 	public static boolean sendRcvFlag(int sendFlag, int rcvFlag) throws IOException

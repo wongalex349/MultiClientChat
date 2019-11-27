@@ -94,7 +94,9 @@ class Server
 			{	
 				while(true)
 				{
-					
+					input = inUser.readLine();
+					System.out.println(input);
+					writeToAllUsers(input, true);
 					break;
 				}
 			} 	catch(Exception e) {}
@@ -141,14 +143,9 @@ class Server
 			{
 				for(String name:keys)
 				{
-					System.out.println("attempting to echo");
+					//System.out.println("attempting to echo");
 					output = users.get(name).getOutputStream();
-					//sendFlag(_SEND);
-					//do
-					//{
-						output.writeBytes(msg+"\n");
-					//} while(!rcvFlag(_RECV));
-
+					output.writeBytes(msg+"\n");
 				}
 			} catch(IOException e)	{	System.out.println("!! message could not be sent !!");	}
 		}
