@@ -19,19 +19,9 @@ class Server
 	{
 		return users.keySet();
 	}
-
-	public static void printCurrentUsernames()
-	{
-		System.out.print("Current Users: ");
-		for(String s:usernames)
-			System.out.print(s+"\t");
-		System.out.println();
-	}
-
 	public static void main(String argv[])
 	{ 
-		ChatHandler.testParser();
-		/*ServerSocket welcomeSocket; 
+		ServerSocket welcomeSocket; 
 		
 		try
 		{
@@ -47,7 +37,7 @@ class Server
 				//printCurrentUsernames();
 			} 
 		} 
-		catch(IOException e) {System.out.println("Server socket creation error");}*/
+		catch(IOException e) {System.out.println("Server socket creation error");}
 	} 	
 
 
@@ -77,8 +67,9 @@ class Server
 		public void getNameFromClient() throws IOException
 		{	
 			while(sendRcvFlag(_NAME, _SEND) == false)	{	/*do nothing*/	}
+			//while(!inUser.ready())	{	sendFlag(_NAME);	}
 			name = inUser.readLine();
-			System.out.println("Username read from client");
+			System.out.println("Username read from client: "+name);
 		}
 
 		public String getName()
@@ -97,6 +88,7 @@ class Server
 		//implement run method
 		public void run() 
 		{
+			writeToAllUsers("New user <"+name+"> has joined!", false);
 			String input;
 			try
 			{	
@@ -112,50 +104,70 @@ class Server
 			}
 		}
 
-		private static String parseMsgForOutput(String msg)
+		private compareMessages(String msg1, String msg2)
 		{
-			String[] parseTime = msg.split("@@parser@@");
-			return parseTime[1];
+			LocalTime msgTime1 = getTimestamp(msg1);
+			LocalTime msgTime2 = getTimestamp(msg2);
+			return msgTime1.compareTo(msgTime2); 
 		}
 
-		private static LocalTime getTimestamp(String msg)
+		private LocalTime getTimestamp(String msg)
 		{
 			String[] parseTime = msg.split("@@parser@@");
 			return LocalTime.parse(parseTime[0]);
 		}
 
-		public static void testParser()
+		private String parseMsgForOutput(String msg)
+		{
+			String[] parseTime = msg.split("@@parser@@");	
+			return parseTime[0].substring(0,8) + " >>> " + name + ":\t" + parseTime[1];
+		}
+
+		public void testParser()
 		{
 			String msg = LocalTime.now().toString() + "@@parser@@" + "yo what up";
 			System.out.println(msg);
-			String parsed = ChatHandler.parseMsgForOutput(msg);
+			String parsed = parseMsgForOutput(msg);
 			System.out.println(parsed);
-			LocalTime timestamp = getTimestamp(msg);
-			System.out.println(timestamp.toString());	
 		}
 
-		public void writeToAllUsers(String msg)
+		public void writeToAllUsers(String msg, boolean parse)
 		{
-			String parsedmsg = parseMsgForOutput(msg);
+			if(parse)
+				msg = parseMsgForOutput(msg);
 			Set<String> keys = getUsernames();
 			DataOutputStream output;
-			for(String name:keys)
+			try
 			{
-				output = users.get(name).getOutputStream();
-				output.writeBytes(parsedmsg);
-			}
+				for(String name:keys)
+				{
+					System.out.println("attempting to echo");
+					output = users.get(name).getOutputStream();
+					//sendFlag(_SEND);
+					//do
+					//{
+						output.writeBytes(msg+"\n");
+					//} while(!rcvFlag(_RECV));
+
+				}
+			} catch(IOException e)	{	System.out.println("!! message could not be sent !!");	}
 		}
 
 		public boolean sendRcvFlag(int sendFlag, int rcvFlag) throws IOException
 		{
 			System.out.println("sending:"+sendFlag+" expecting:"+rcvFlag);
 			outUser.writeByte(sendFlag);
-			return (inUser.read() == rcvFlag);
+			int temp = inUser.read();
+			//System.out.println("flag: " + temp);
+			return (temp == rcvFlag);
 		} 
 		public boolean rcvFlag(int rcvFlag) throws IOException
 		{
 			System.out.println("expecting:"+rcvFlag);
-			return (inUser.read() == rcvFlag);
+			if(inUser.ready())
+				return (inUser.read() == rcvFlag);
+			else
+				return false;
 		}
 		public boolean sendFlag(int sendFlag) throws IOException
 		{

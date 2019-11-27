@@ -14,8 +14,8 @@ class Client
 
 	public static void main(String argv[]) throws Exception 
     { 
-		int flagInput;
-		String userInput;
+		//int flagInput;
+		String userInput = null;
 		boolean closeSocket = false;
 		System.out.println("New client connecting to Server on port 5000...");
 		Socket clientSocket = new Socket("localhost", 5000);
@@ -24,19 +24,18 @@ class Client
 
 		name = getName();
 
-		if(rcvFlag(_NAME))
-		{
+		//if(rcvFlag(_NAME))
+	//	{
 			System.out.println("sending name to server");
 			sendName();
 			System.out.println("Server received name");
-		}
+	//	}
 
 		while(true)
 		{
 			try
 			{
-				userInput = getUserInput();
-				sendMsgToServer(userInput);
+				getMessages();		
 				if(closeSocket)
 					break;
 			} catch(Exception e)	{	System.out.println("Client I/O error");	}
@@ -60,8 +59,15 @@ class Client
 	public static void sendName() throws IOException
 	{
 		System.out.println("sendName() executing");
-		if(sendFlag(_SEND))
-			outServer.writeBytes(name+'\n');
+		while(!rcvFlag(_NAME))	{	/*do nothing*/	}
+		sendFlag(_SEND);
+		outServer.writeBytes(name+'\n');
+	}
+
+	public static void textBoxControls() throws IOException
+	{
+		String userInput = getUserInput();
+		sendMsgToServer(userInput);
 	}
 
 	public static String getUserInput() throws IOException
@@ -79,6 +85,15 @@ class Client
 		//System.out.println(timestamp);
 	}
 
+	public static void getMessages() throws IOException
+	{
+		//if(rcvFlag(_SEND))
+		//{
+			System.out.println(inServer.readLine());
+		//	sendFlag(_RECV);
+		//}
+	}
+
 	public static boolean sendRcvFlag(int sendFlag, int rcvFlag) throws IOException
 	{
 		System.out.println("sending:"+sendFlag+" expecting:"+rcvFlag);
@@ -88,8 +103,13 @@ class Client
 
 	public static boolean rcvFlag(int rcvFlag) throws IOException
 	{
-		System.out.println("expecting:"+rcvFlag);
-		return (inServer.read() == rcvFlag);
+		if(inServer.ready())
+		{
+			System.out.println("expecting:"+rcvFlag);
+			return (inServer.read() == rcvFlag);
+		}
+		else
+			return false;
 	}
 
 	public static boolean sendFlag(int sendFlag) throws IOException
