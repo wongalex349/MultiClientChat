@@ -1,5 +1,6 @@
 import java.io.*; 
 import java.net.*; 
+import java.time.*;
 class Client 
 { 
 	private static BufferedReader inUser = new BufferedReader(new InputStreamReader(System.in));
@@ -14,6 +15,8 @@ class Client
 	public static void main(String argv[]) throws Exception 
     { 
 		int flagInput;
+		String userInput;
+		boolean closeSocket = false;
 		System.out.println("New client connecting to Server on port 5000...");
 		Socket clientSocket = new Socket("localhost", 5000);
 		inServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); 
@@ -32,7 +35,9 @@ class Client
 		{
 			try
 			{
-				if(rcvFlag(_EXIT))
+				userInput = getUserInput();
+				sendMsgToServer(userInput);
+				if(closeSocket)
 					break;
 			} catch(Exception e)	{	System.out.println("Client I/O error");	}
 		}
@@ -41,8 +46,15 @@ class Client
 
 	public static String getName() throws IOException
 	{
-		System.out.print("Enter username: ");
-		return inUser.readLine();
+		String input;
+		do
+		{
+			System.out.print("Enter username: ");
+			input = inUser.readLine();
+			if(input==null)
+				System.out.print("Username cannot be blank!");
+		} while(input==null);
+		return input;
 	}
 
 	public static void sendName() throws IOException
@@ -52,9 +64,24 @@ class Client
 			outServer.writeBytes(name+'\n');
 	}
 
+	public static String getUserInput() throws IOException
+	{
+		System.out.print("> ");
+		return inUser.readLine();
+	}
+
+	public static void sendMsgToServer(String msg) throws IOException
+	{
+		String timestamp = LocalTime.now().toString();
+		String fullmessage = timestamp + "@@parser@@" + msg;
+		sendFlag(_SEND);
+		outServer.writeBytes(fullmessage);
+		//System.out.println(timestamp);
+	}
+
 	public static boolean sendRcvFlag(int sendFlag, int rcvFlag) throws IOException
 	{
-		System.out.println("sending:"+sendFlag+"expecting:"+rcvFlag);
+		System.out.println("sending:"+sendFlag+" expecting:"+rcvFlag);
 		outServer.writeByte(sendFlag);
 		return (inServer.read() == rcvFlag);
 	} 
