@@ -50,7 +50,7 @@ class Client
 			try
 			{
 				getMessages();
-				textBoxControls(); //only accepts first input and echoes?
+				//textBoxControls(); //only accepts first input and echoes?
 				if(closeSocket)
 					break;
 			} catch(Exception e)	{	System.out.println("Client I/O error");	}
