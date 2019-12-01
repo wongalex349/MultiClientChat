@@ -1,6 +1,8 @@
 import java.io.*; 
 import java.net.*; 
 import java.time.*;
+import java.awt.*;
+import javax.swing.*;
 class Client 
 { 
 	private static BufferedReader inUser = new BufferedReader(new InputStreamReader(System.in));
@@ -12,8 +14,19 @@ class Client
 	private static final int _EXIT = 0x04;
 	private static String name;
 
+
+
 	public static void main(String argv[]) throws Exception 
-    { 
+    {
+		JFrame gui = new JFrame("Message Sender");
+		JTextField text = new JTextField(100);
+		JTextArea message = new JTextArea(50,100);
+		gui.setVisible(true);
+    	text.setEditable(true);
+    	message.setEditable(false);
+    	gui.getContentPane().add(text,BorderLayout.SOUTH);
+    	gui.getContentPane().add(new JScrollPane(message), BorderLayout.CENTER);
+    	gui.pack();
 		//int flagInput;
 		String userInput = null;
 		boolean closeSocket = false;

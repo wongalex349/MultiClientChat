@@ -106,7 +106,7 @@ class Server
 			}
 		}
 
-		private compareMessages(String msg1, String msg2)
+		private int compareMessages(String msg1, String msg2)
 		{
 			LocalTime msgTime1 = getTimestamp(msg1);
 			LocalTime msgTime2 = getTimestamp(msg2);
