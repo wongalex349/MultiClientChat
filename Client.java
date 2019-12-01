@@ -14,9 +14,9 @@ class Client
 	private static final int _SEND = 0x03; 
 	private static final int _EXIT = 0x04;
 	private static String name;
-	private static JFrame gui = new JFrame("Message Sender");
-	private static JTextField text = new JTextField(100);
-	private static JTextArea message = new JTextArea(50,100);
+	private static JFrame gui = new JFrame("DumplingChat");
+	private static JTextField text = new JTextField(40);
+	private static JTextArea message = new JTextArea(30,40);
 	private static BufferedReader inUser = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String argv[]) throws Exception 
@@ -37,7 +37,7 @@ class Client
 		outServer = new DataOutputStream(clientSocket.getOutputStream());
 
 		name = getName();
-
+		gui.setTitle("DumplingChat: " + name);
 		//if(rcvFlag(_NAME))
 	//	{
 			System.out.println("sending name to server");
@@ -50,7 +50,7 @@ class Client
 			try
 			{
 				getMessages();
-				textBoxControls(); //only accepts first input and echoes?
+				textBoxControls(); 
 				if(closeSocket)
 					break;
 			} catch(Exception e)	{	System.out.println("Client I/O error");	}
@@ -132,7 +132,7 @@ class Client
 
 	public static void getMessages() throws IOException
 	{
-		while(inServer.ready())
+		if(inServer.ready())
 			message.append(inServer.readLine() + "\n");
 			//System.out.println(inServer.readLine());
 	}

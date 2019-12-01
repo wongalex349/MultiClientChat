@@ -97,13 +97,21 @@ class Server
 					input = inUser.readLine();
 					System.out.println(input);
 					writeToAllUsers(input, true);
-					break;
 				}
-			} 	catch(Exception e) {}
-			finally
+			} 
+			catch(SocketException sock)
 			{
+				if (name != null) 
+				{
+					String msg = "<"+name + "> left the chat";
+					System.out.println(msg);
+					users.remove(name);
+					writeToAllUsers(msg, false);
 
+				}
+				try { user.close(); } catch (IOException e) {}
 			}
+			catch(Exception e) {	e.printStackTrace();	}
 		}
 
 		private int compareMessages(String msg1, String msg2)
@@ -122,7 +130,7 @@ class Server
 		private String parseMsgForOutput(String msg)
 		{
 			String[] parseTime = msg.split("@@parser@@");	
-			return parseTime[0].substring(0,8) + " >>> " + name + ":\t" + parseTime[1];
+			return parseTime[0].substring(0,8) + " <" + name + ">:\t" + parseTime[1];
 		}
 
 		public void testParser()
