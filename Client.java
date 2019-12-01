@@ -50,7 +50,7 @@ class Client
 			try
 			{
 				getMessages();
-				//textBoxControls(); //only accepts first input and echoes?
+				textBoxControls(); //only accepts first input and echoes?
 				if(closeSocket)
 					break;
 			} catch(Exception e)	{	System.out.println("Client I/O error");	}
@@ -82,7 +82,7 @@ class Client
 		System.out.println("sendName() executing");
 		while(!rcvFlag(_NAME))	{	/*do nothing*/	}
 		sendFlag(_SEND);
-		message.append(name + " has joined!\n");
+		//message.append(name + " has joined!\n");
 		outServer.writeBytes(name+'\n');
 	}
 
@@ -125,8 +125,8 @@ class Client
 		String timestamp = LocalTime.now().toString();
 		String fullmessage = timestamp + "@@parser@@" + msg + "\n";
 		//sendFlag(_SEND);
-		//outServer.writeBytes(fullmessage);
-		message.append(fullmessage + "\n");
+		outServer.writeBytes(fullmessage);
+		//message.append(fullmessage + "\n");
 		//System.out.println(timestamp);
 	}
 
