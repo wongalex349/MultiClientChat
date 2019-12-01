@@ -3,9 +3,10 @@ import java.net.*;
 import java.time.*;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.*;
 class Client 
-{ 
-	private static BufferedReader inUser = new BufferedReader(new InputStreamReader(System.in));
+{
+	private static PrintWriter out;
 	private static BufferedReader inServer;
 	private static DataOutputStream outServer;
 	private static final int _NAME = 0x01;
@@ -16,11 +17,11 @@ class Client
 	private static JFrame gui = new JFrame("Message Sender");
 	private static JTextField text = new JTextField(100);
 	private static JTextArea message = new JTextArea(50,100);
-
+	private static BufferedReader inUser = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String argv[]) throws Exception 
     {
-
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
     	text.setEditable(true);
     	message.setEditable(false);
@@ -81,17 +82,33 @@ class Client
 		System.out.println("sendName() executing");
 		while(!rcvFlag(_NAME))	{	/*do nothing*/	}
 		sendFlag(_SEND);
+		message.append(name + " has joined!\n");
 		outServer.writeBytes(name+'\n');
 	}
 
 	public static void textBoxControls() throws IOException
 	{
-		String userInput = getUserInput();
-		sendMsgToServer(userInput);
+		text.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//out.println(text.getText());
+				try {
+					sendMsgToServer(text.getText());
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+				text.setText("");
+			}
+		});
+
+//		String userInput = getUserInput();
+		//sendMsgToServer(userInput);
+
 	}
 
 	public static String getUserInput() throws IOException
 	{
+
+		//return text.getText();
 		System.out.print("\n> ");
 		return inUser.readLine();
 		//return text.getText();
@@ -102,7 +119,8 @@ class Client
 		String timestamp = LocalTime.now().toString();
 		String fullmessage = timestamp + "@@parser@@" + msg + "\n";
 		//sendFlag(_SEND);
-		outServer.writeBytes(fullmessage);
+		//outServer.writeBytes(fullmessage);
+		message.append(fullmessage + "\n");
 		//System.out.println(timestamp);
 	}
 
