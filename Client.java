@@ -88,17 +88,23 @@ class Client
 
 	public static void textBoxControls() throws IOException
 	{
-		text.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//out.println(text.getText());
-				try {
-					sendMsgToServer(text.getText());
-				} catch (IOException ex) {
-					ex.printStackTrace();
+		//constantly looping for some reason because of the new action listener
+
+			text.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//out.println(text.getText());
+					try {
+						if(!text.getText().equals("")) {
+							sendMsgToServer(text.getText());
+						}
+						text.setText("");
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+
 				}
-				text.setText("");
-			}
-		});
+			});
+
 
 //		String userInput = getUserInput();
 		//sendMsgToServer(userInput);
@@ -127,7 +133,8 @@ class Client
 	public static void getMessages() throws IOException
 	{
 		while(inServer.ready())
-			System.out.println(inServer.readLine());
+			message.append(inServer.readLine() + "\n");
+			//System.out.println(inServer.readLine());
 	}
 
 	public static boolean sendRcvFlag(int sendFlag, int rcvFlag) throws IOException
