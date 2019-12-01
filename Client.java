@@ -13,14 +13,14 @@ class Client
 	private static final int _SEND = 0x03; 
 	private static final int _EXIT = 0x04;
 	private static String name;
-
+	private static JFrame gui = new JFrame("Message Sender");
+	private static JTextField text = new JTextField(100);
+	private static JTextArea message = new JTextArea(50,100);
 
 
 	public static void main(String argv[]) throws Exception 
     {
-		JFrame gui = new JFrame("Message Sender");
-		JTextField text = new JTextField(100);
-		JTextArea message = new JTextArea(50,100);
+
 		gui.setVisible(true);
     	text.setEditable(true);
     	message.setEditable(false);
@@ -57,19 +57,25 @@ class Client
 		clientSocket.close();
 	} 
 
-	public static String getName() throws IOException
-	{
-		String input;
-		do
-		{
-			System.out.print("Enter username: ");
-			input = inUser.readLine();
-			if(input==null)
-				System.out.print("Username cannot be blank!");
-		} while(input==null);
-		return input;
+//	public static String getName() throws IOException
+//	{
+//		String input;
+//		do
+//		{
+//			System.out.print("Enter username: ");
+//			input = inUser.readLine();
+//			//input = text.getText();
+//			text.setText("");
+//			if(input==null)
+//				System.out.print("Username cannot be blank!");
+//		} while(input==null);
+//		return input;
+//
+//	}
+	public static String getName() {
+		return JOptionPane.showInputDialog(
+				gui,  "Choose a username: ","Screen name selection", JOptionPane.PLAIN_MESSAGE);
 	}
-
 	public static void sendName() throws IOException
 	{
 		System.out.println("sendName() executing");
@@ -88,6 +94,7 @@ class Client
 	{
 		System.out.print("\n> ");
 		return inUser.readLine();
+		//return text.getText();
 	}
 
 	public static void sendMsgToServer(String msg) throws IOException
