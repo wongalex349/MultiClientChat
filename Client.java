@@ -19,12 +19,19 @@ class Client
 	private static JTextArea message = new JTextArea(30,40);
 	private static BufferedReader inUser = new BufferedReader(new InputStreamReader(System.in));
 
-	public static void main(String argv[]) throws Exception 
+	public static void main(String argv[]) throws Exception
     {
+		gui.getContentPane().setBackground(Color.BLUE);
+
+		message.setBackground(Color.LIGHT_GRAY);
+    	Font font = new Font("Verdana",Font.LAYOUT_LEFT_TO_RIGHT , 20);
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
+		text.setFont(font);
+		message.setFont(font);
     	text.setEditable(true);
     	message.setEditable(false);
+
     	gui.getContentPane().add(text,BorderLayout.SOUTH);
     	gui.getContentPane().add(new JScrollPane(message), BorderLayout.CENTER);
     	gui.pack();
