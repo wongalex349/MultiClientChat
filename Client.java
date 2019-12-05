@@ -15,8 +15,8 @@ class Client
 	private static final int _EXIT = 0x04;
 	private static String name;
 	private static JFrame gui = new JFrame("DumplingChat");
-	private static JTextField text = new JTextField(40);
-	private static JTextArea message = new JTextArea(30,40);
+	private static JTextField text = new JTextField(25);
+	private static JTextArea message = new JTextArea(25,30);
 	private static BufferedReader inUser = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String argv[]) throws Exception
@@ -24,7 +24,7 @@ class Client
 		gui.getContentPane().setBackground(Color.BLUE);
 
 		message.setBackground(Color.LIGHT_GRAY);
-    	Font font = new Font("Verdana",Font.LAYOUT_LEFT_TO_RIGHT , 20);
+    	Font font = new Font("Verdana",Font.LAYOUT_LEFT_TO_RIGHT , 14);
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
 		text.setFont(font);
