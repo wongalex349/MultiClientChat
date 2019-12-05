@@ -24,6 +24,7 @@ class Client
 		gui.getContentPane().setBackground(Color.BLUE);
 
 		message.setBackground(Color.LIGHT_GRAY);
+		message.setLineWrap(true);
     	Font font = new Font("Verdana",Font.LAYOUT_LEFT_TO_RIGHT , 14);
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
